@@ -1,0 +1,43 @@
+# Ignorar archivos de entorno virtual
+venv/
+env/
+ENV/
+.venv
+
+# Ignorar archivos de caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Ignorar la base de datos SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# Ignorar archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Ignorar archivos de build
+build/
+dist/
+*.egg-info/
+
+# Ignorar Node modules (si se usa)
+node_modules/
+package-lock.json
+
+# Ignorar logs
+*.log
+logs/
+
+# Ignorar archivos temporales
+tmp/
+temp/
+*.tmp
