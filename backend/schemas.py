@@ -28,6 +28,7 @@ class ConcursanteBase(BaseModel):
     categoria_peso: str
     club: str
     ciudad: str
+    team_id: Optional[int] = None
     ano_inicio: int
 
 class ConcursanteCreate(ConcursanteBase):
@@ -38,6 +39,7 @@ class Concursante(ConcursanteBase):
     fecha_registro: datetime
     levantamientos: List[Levantamiento] = []
     photo_url: Optional[str] = None
+    team: Optional[dict] = None
     
     class Config:
         from_attributes = True
@@ -55,5 +57,22 @@ class Competicion(CompeticionBase):
     id: int
     levantamientos: List[Levantamiento] = []
     
+    class Config:
+        from_attributes = True
+
+
+class EquipoBase(BaseModel):
+    nombre: str
+    descripcion: Optional[str] = None
+
+
+class EquipoCreate(EquipoBase):
+    pass
+
+
+class Equipo(EquipoBase):
+    id: int
+    miembros: List[Concursante] = []
+
     class Config:
         from_attributes = True

@@ -85,7 +85,7 @@ powerlifting-app/
 - `DELETE /api/concursantes/{id}` - Eliminar
 
 ### Competiciones
-- `GET /api/competiciones` - Obtener todas
+- `GET /api/competiciones?desde=2024` - Obtener el historial desde un año dado, ordenado de más reciente a más antiguo. Si omites `desde`, el valor por defecto es 2024.
 - `POST /api/competiciones` - Crear nueva
 - `GET /api/competiciones/{id}` - Obtener por ID
 
@@ -210,3 +210,33 @@ Creado con ❤️ para la comunidad de powerlifting cubana.
 ---
 
 **¿Necesitas ayuda?** Consulta los endpoints en Swagger: `http://localhost:8000/docs`
+
+## 📦 Despliegue en Render (rápido)
+
+1. Sube este repositorio a GitHub si no está ya en uno público/privado.
+2. Ve a https://render.com y crea una cuenta (puedes usar la opción gratuita).
+3. Conecta tu repositorio y en el panel de Render crea dos servicios:
+   - **Backend (Web Service)**
+     - Tipo: `Web Service` -> Python
+     - Root: selecciona la carpeta `backend` o usa `render.yaml` (la repo ya contiene `render.yaml`).
+     - Build command: `pip install -r backend/requirements.txt`
+     - Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+     - Environment variables: añade `ADMIN_KEY` con la clave que quieras usar (ej: `mi_clave_segura`).
+   - **Frontend (Static Site)**
+     - Tipo: `Static Site`
+     - Publish directory: `frontend`
+
+4. Si usas el `render.yaml` en la raíz, Render detectará y creará ambos servicios automáticamente al conectar el repo.
+5. Después del deploy, anota las URLs asignadas por Render: la del frontend debe apuntar a los archivos estáticos y el frontend ya está configurado para llamar a la API usando `http://localhost:8000` — debes actualizar `frontend/script.js` para usar la URL del backend de Render (reemplazar `API_URL` y `BACKEND_URL`).
+
+Ejemplo rápido para producción: en `frontend/script.js` cambia al inicio:
+```js
+const API_URL = "https://<tu-backend>.onrender.com/api";
+const BACKEND_URL = "https://<tu-backend>.onrender.com";
+```
+
+6. Opcional: si quieres persistencia real, añade un servicio de base de datos (Postgres) en Render y actualiza `database.py` para usar la URL de la base.
+
+7. Nota sobre archivos estáticos: las fotos subidas (`/static/photos`) quedan en el disco del contenedor y pueden perderse en redeploys; para producción considera usar un bucket (S3-compatible) o almacenar fotos en un servicio persistente.
+
+Si quieres, hago los cambios finales para que `frontend/script.js` use una variable `RENDER_BACKEND_URL` tomada de `window.__BACKEND_URL__` o del query param `backend_url`, y preparo el commit listo para desplegar.
